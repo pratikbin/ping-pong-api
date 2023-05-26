@@ -1,0 +1,41 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ping-pong-api
+  labels:
+    name: ping-pong-api
+  annotations:
+    ## Enable below for TLS
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+    # kubernetes.io/tls-acme: "true"
+
+    ## Enable below for request affinity to pod
+    # nginx.ingress.kubernetes.io/affinity: cookie
+    # nginx.ingress.kubernetes.io/affinity-mode: balanced
+    # nginx.ingress.kubernetes.io/session-cookie-name: _ping_pong
+    # nginx.ingress.kubernetes.io/session-cookie-secure: "true"
+    # nginx.ingress.kubernetes.io/session-cookie-samesite: "strict"
+    # nginx.ingress.kubernetes.io/session-cookie-change-on-failure: "true"
+
+    ## Enable below for websockets and long live connecctions
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    # nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: &host "ping-pong-api.pratikb.in"
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: ping-pong-api
+                port:
+                  number: 80
+  ## Enable below for TLS
+  # tls:
+  #   - secretName: *host
+  #     hosts:
+  #       - *host
