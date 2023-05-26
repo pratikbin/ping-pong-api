@@ -1,0 +1,10 @@
+docker-compose.yaml
+Dockerfile
+.dockerignore
+.git
+.gitignore
+Makefile
+*.md
+k8s
+.github
+*.sh

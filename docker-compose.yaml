@@ -1,0 +1,15 @@
+---
+version: "3"
+services:
+  ping-pong-api:
+    image: pratikbin/ping-pong-api:edge
+    container_name: ping-pong-api
+    build: .
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: wget -qO- 127.0.0.1:3000/ping | grep pong
+      start_period: 5s
+      interval: 5s
+      timeout: 4s
+      retries: 3
