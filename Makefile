@@ -131,7 +131,7 @@ create-k8s-cluster:
 	KIND_IMAGE=${KIND_IMAGE} DOCKER_CONTAINER_NAME=${DOCKER_CONTAINER_NAME} ./kind.sh
 	@echo "Wait few minutes to get cluster in ready state"
 	@sleep 60
-	kindget kubeconfig --name ${DOCKER_CONTAINER_NAME} >${KUBECONFIG}
+	kind get kubeconfig --name ${DOCKER_CONTAINER_NAME} >${KUBECONFIG}
 	KUBECONFIG=${KUBECONFIG} kubectl apply -f ${INGRESS_MANIFESTS}
 	@echo "Waiting for ingress to get up"
 	KUBECONFIG=${KUBECONFIG} kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s
@@ -139,10 +139,10 @@ create-k8s-cluster:
 	@echo "Ready to deploy stuff"
 
 delete-cluster:
-	kinddelete cluster --name ${DOCKER_CONTAINER_NAME}
+	kind delete cluster --name ${DOCKER_CONTAINER_NAME}
 
 k8s-apply: docker-build
-	kindload docker-image ${DOCKER_IMAGE} --nodes ${DOCKER_CONTAINER_NAME}-control-plane --name ${DOCKER_CONTAINER_NAME}
+	kind load docker-image ${DOCKER_IMAGE} --nodes ${DOCKER_CONTAINER_NAME}-control-plane --name ${DOCKER_CONTAINER_NAME}
 	KUBECONFIG=${KUBECONFIG} kubectl apply -f ./k8s/
 
 k8s-clean:
